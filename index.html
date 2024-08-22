@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Healthcare Industry Analysis</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100 p-8">
+    <div class="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-md">
+      <h1 class="text-2xl font-bold mb-4">Healthcare Industry Analysis</h1>
+      <textarea
+        id="question"
+        class="w-full p-2 border rounded mb-4"
+        rows="4"
+        placeholder="Enter your question about the healthcare industry..."
+      ></textarea>
+      <button
+        id="submit"
+        class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+      >
+        Analyze
+      </button>
+      <div id="response" class="mt-6"></div>
+    </div>
+
+    <script>
+      document.getElementById("submit").addEventListener("click", async () => {
+        const question = document.getElementById("question").value;
+        const response = document.getElementById("response");
+        response.innerHTML = "Analyzing...";
+
+        try {
+          const result = await fetch(
+            "https://your-aci-dns-name.azurecontainer.io/analyze",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ text: question }),
+            }
+          );
+          const data = await result.json();
+          response.innerHTML = `<strong>Analysis:</strong><br>${data.response}`;
+        } catch (error) {
+          response.innerHTML = `Error: ${error.message}`;
+        }
+      });
+    </script>
+  </body>
+</html>
