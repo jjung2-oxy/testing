@@ -1,0 +1,13 @@
+promptflow
+promptflow-tools
+promptflow-core
+nltk
+transformers
+torch
+scikit-learn
+numpy
+python-dotenv
+openai
+python-docx
+fastapi
+uvicorn

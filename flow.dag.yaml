@@ -1,0 +1,62 @@
+$schema: https://azuremlschemas.azureedge.net/promptflow/latest/Flow.schema.json
+environment:
+  python_requirements_txt: requirements.txt
+inputs:
+  folder_path:
+    type: string
+    default: /Users/jordanjung/Desktop/HA/interviews
+  question:
+    type: string
+    default:
+      "Please provide a comprehensive response that addresses the question in
+      detail. Include specific quotes from the provided context to support your
+      analysis. Organize your response into clear sections covering different
+      aspects of the question. Aim for a thorough analysis that captures the
+      nuances and complexities of the healthcare industry based on the interview
+      data. "
+outputs:
+  answer:
+    type: string
+    reference: ${generate_response.output}
+nodes:
+  - name: read_documents
+    type: python
+    source:
+      type: code
+      path: nodes/read_documents.py
+    inputs:
+      folder_path: ${inputs.folder_path}
+  - name: preprocess_documents
+    type: python
+    source:
+      type: code
+      path: nodes/preprocess_documents.py
+    inputs:
+      documents: ${read_documents.output}
+  - name: retrieve_info
+    type: python
+    source:
+      type: code
+      path: nodes/retrieve_info.py
+    inputs:
+      processed_docs: ${preprocess_documents.output}
+      question: ${inputs.question}
+  - name: analyze_sentiment
+    type: python
+    source:
+      type: code
+      path: nodes/analyze_sentiment.py
+    inputs:
+      sentences: ${retrieve_info.output}
+  - name: generate_response
+    type: llm
+    source:
+      type: code
+      path: nodes/generate_response.jinja2
+    inputs:
+      question: ${inputs.question}
+      relevant_info: ${retrieve_info.output}
+      sentiments: ${analyze_sentiment.output}
+      deployment_name: gpt-4o
+    connection: open_ai_connection
+    api: chat

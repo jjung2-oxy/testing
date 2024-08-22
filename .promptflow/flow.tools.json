@@ -1,0 +1,138 @@
+{
+  "package": {},
+  "code": {
+    "chat.jinja2": {
+      "type": "llm",
+      "inputs": {
+        "relevant_info": {
+          "type": [
+            "string"
+          ]
+        },
+        "sentiments": {
+          "type": [
+            "string"
+          ]
+        },
+        "chat_history": {
+          "type": [
+            "string"
+          ]
+        },
+        "question": {
+          "type": [
+            "string"
+          ]
+        }
+      },
+      "source": "chat.jinja2"
+    },
+    "nodes/generate_response.jinja2": {
+      "type": "llm",
+      "inputs": {
+        "question": {
+          "type": [
+            "string"
+          ]
+        },
+        "relevant_info": {
+          "type": [
+            "string"
+          ]
+        },
+        "sentiments": {
+          "type": [
+            "string"
+          ]
+        }
+      },
+      "source": "nodes/generate_response.jinja2"
+    },
+    "nodes/read_documents.py": {
+      "type": "python",
+      "inputs": {
+        "folder_path": {
+          "type": [
+            "string"
+          ]
+        }
+      },
+      "source": "nodes/read_documents.py",
+      "function": "read_documents"
+    },
+    "nodes/preprocess_documents.py": {
+      "type": "python",
+      "inputs": {
+        "documents": {
+          "type": [
+            "list"
+          ]
+        }
+      },
+      "source": "nodes/preprocess_documents.py",
+      "function": "preprocess_documents"
+    },
+    "nodes/retrieve_info.py": {
+      "type": "python",
+      "inputs": {
+        "processed_docs": {
+          "type": [
+            "string"
+          ]
+        },
+        "question": {
+          "type": [
+            "string"
+          ]
+        },
+        "top_k": {
+          "type": [
+            "int"
+          ],
+          "default": "15"
+        }
+      },
+      "source": "nodes/retrieve_info.py",
+      "function": "retrieve_relevant_info"
+    },
+    "nodes/analyze_sentiment.py": {
+      "type": "python",
+      "inputs": {
+        "sentences": {
+          "type": [
+            "list"
+          ]
+        }
+      },
+      "source": "nodes/analyze_sentiment.py",
+      "function": "analyze_sentiment"
+    },
+    "nodes/debug_node.py": {
+      "type": "python",
+      "inputs": {
+        "read_documents_output": {
+          "type": [
+            "object"
+          ]
+        },
+        "preprocess_documents_output": {
+          "type": [
+            "object"
+          ]
+        },
+        "retrieve_info_output": {
+          "type": [
+            "object"
+          ]
+        },
+        "analyze_sentiment_output": {
+          "type": [
+            "object"
+          ]
+        }
+      },
+      "source": "nodes/debug_node.py",
+      "function": "debug_output"
+    }
+  }
+}
